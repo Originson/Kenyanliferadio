@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenyan Life Radio</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000;
+    color: #fff;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: #111;
+  }
+
+  header img {
+    height: 60px;
+  }
+
+  nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+  }
+
+  nav a:hover {
+    color: red;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 120px 20px;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('st1.png');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+  }
+
+  .live-badge {
+    color: red;
+    font-weight: bold;
+  }
+
+  .player {
+    margin-top: 20px;
+  }
+
+  button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(to right, red, green);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .section {
+    padding: 50px 20px;
+    text-align: center;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+  }
+
+  .card {
+    background: #111;
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  .chat-box {
+    max-width: 600px;
+    margin: auto;
+  }
+
+  input {
+    width: 70%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .messages {
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: left;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: #111;
+    margin-top: 40px;
+  }
+
+  .live-badge {
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+  }
+
+  .equalizer {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+  }
+
+  .bar {
+    width: 6px;
+    height: 20px;
+    background: linear-gradient(to top, red, green);
+    animation: bounce 1s infinite ease-in-out;
+  }
+
+  .bar:nth-child(2) { animation-delay: 0.2s; }
+  .bar:nth-child(3) { animation-delay: 0.4s; }
+  .bar:nth-child(4) { animation-delay: 0.6s; }
+  .bar:nth-child(5) { animation-delay: 0.8s; }
+
+  @keyframes bounce {
+    0%, 100% { height: 20px; }
+    50% { height: 50px; }
+  }
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="kenyan life radio.png" alt="Logo">
+  <nav>
+    <a href="#">Home</a>
+    <a href="#shows">Shows</a>
+    <a href="#listen">Listen Live</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <input type="file" id="coverUpload" accept="image/*" onchange="changeCover(event)" style="margin-bottom:10px;">
+  <!-- Cover photo applied as background (st1.png) -->
+  <h1>Kenyan Life Radio</h1>
+  <p class="live-badge">● LIVE NOW</p>
+
+  <div class="player">
+    <audio id="radio" src=""></audio>
+    <button onclick="toggleRadio()">▶ Play / Pause</button>
+
+    <div style="margin-top:20px;">
+      <h3>Connect Stream</h3>
+      <input type="text" id="streamURL" placeholder="Enter Stream URL">
+      <input type="text" id="streamKey" placeholder="Enter Stream Key (optional)">
+      <button onclick="connectStream()">Connect</button>
+    </div>
+
+    <div id="nowPlaying" style="margin-top:15px; font-size:18px;">
+      🎶 Now Playing: <span id="song">Loading...</span>
+    </div>
+
+    <div id="listeners" style="margin-top:10px; font-size:16px; color:lightgreen;">
+      👥 Listeners Online: <span id="count">0</span>
+    </div>
+  </div>
+
+    <div id="listeners" style="margin-top:10px; font-size:16px; color:lightgreen;">
+      👥 Listeners Online: <span id="count">0</span>
+    </div>
+  </div>
+  <div class="equalizer">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+</section>
+
+<section class="section" id="shows">
+  <h2>Popular Shows</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Morning Drive</h3>
+      <p>Start your day with energy and news.</p>
+    </div>
+    <div class="card">
+      <h3>Afternoon Vibes</h3>
+      <p>Cool music and shoutouts.</p>
+    </div>
+    <div class="card">
+      <h3>Night Chill</h3>
+      <p>Relax with smooth hits.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="djs">
+  <h2>Meet Our DJs</h2>
+  <div class="grid">
+    <div class="card">
+      <img src="dj1.jpg" alt="DJ" style="width:100%; border-radius:10px;">
+      <h3>DJ Mike</h3>
+      <p>Host of Morning Drive. Bringing energy every morning.</p>
+    </div>
+    <div class="card">
+      <img src="dj2.jpg" alt="DJ" style="width:100%; border-radius:10px;">
+      <h3>DJ Aisha</h3>
+      <p>Afternoon Vibes queen. Music, shoutouts & fun.</p>
+    </div>
+    <div class="card">
+      <img src="dj3.jpg" alt="DJ" style="width:100%; border-radius:10px;">
+      <h3>DJ Kelvin</h3>
+      <p>Night Chill specialist. Smooth and relaxing hits.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="djs">
+  <h2>Meet Our DJs</h2>
+  <div class="grid">
+
+    <div class="card">
+      <input type="file" accept="image/*" onchange="changeDJImage(event, this)">
+      <img src="dj1.jpg" style="width:100%; border-radius:10px;">
+      <h3>DJ Mike 🔴 LIVE</h3>
+      <p>Morning Drive Host</p>
+      <p>
+        <a href="#">Instagram</a> | 
+        <a href="#">TikTok</a>
+      </p>
+      <button onclick="messageDJ('DJ Mike')">Message DJ</button>
+    </div>
+
+    <div class="card">
+      <input type="file" accept="image/*" onchange="changeDJImage(event, this)">
+      <img src="dj2.jpg" style="width:100%; border-radius:10px;">
+      <h3>DJ Aisha</h3>
+      <p>Afternoon Vibes</p>
+      <p>
+        <a href="#">Instagram</a> | 
+        <a href="#">TikTok</a>
+      </p>
+      <button onclick="messageDJ('DJ Aisha')">Message DJ</button>
+    </div>
+
+    <div class="card">
+      <input type="file" accept="image/*" onchange="changeDJImage(event, this)">
+      <img src="dj3.jpg" style="width:100%; border-radius:10px;">
+      <h3>DJ Kelvin</h3>
+      <p>Night Chill</p>
+      <p>
+        <a href="#">Instagram</a> | 
+        <a href="#">TikTok</a>
+      </p>
+      <button onclick="messageDJ('DJ Kelvin')">Message DJ</button>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="listen">
+  <h2>Listener Interaction</h2>
+  <div class="chat-box">
+    <input type="text" id="messageInput" placeholder="Send a shoutout...">
+    <button onclick="sendMessage()">Send</button>
+    <div class="messages" id="messages"></div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <h2>Contact & Requests</h2>
+  <p>📞 Call / WhatsApp: +254725822639</p>
+  <p>Email: info@kenyanliferadio.com</p>
+</section>
+
+<footer>
+  <p>© 2026 Kenyan Life Radio - All Rights Reserved</p>
+</footer>
+
+<script>
+  const radio = document.getElementById('radio');
+
+  function connectStream() {
+  const url = document.getElementById('streamURL').value;
+  const key = document.getElementById('streamKey').value;
+
+  if (url !== "") {
+    document.getElementById('radio').src = url;
+    alert('Stream connected successfully!');
+  } else {
+    alert('Please enter a stream URL');
+  }
+}
+
+function toggleRadio() {
+    if (radio.paused) {
+      radio.play();
+    } else {
+      radio.pause();
+    }
+  }
+
+  // Fake Now Playing (can connect to real API later)
+  const songs = [
+    "Afrobeats Hit Mix",
+    "Gengetone Vibes",
+    "Bongo Flava Classics",
+    "Gospel Hour",
+    "Hip Hop Kenya"
+  ];
+
+  function updateSong() {
+    const random = Math.floor(Math.random() * songs.length);
+    document.getElementById('song').textContent = songs[random];
+  }
+
+  setInterval(updateSong, 5000);
+  updateSong();
+
+  // Fake Listener Counter
+  function updateListeners() {
+    const count = Math.floor(Math.random() * 500) + 50;
+    document.getElementById('count').textContent = count;
+  }
+
+  setInterval(updateListeners, 4000);
+  updateListeners();
+
+  function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const messageText = input.value.trim();
+
+    if (messageText !== "") {
+      const messagesDiv = document.getElementById('messages');
+
+      const newMessage = document.createElement('div');
+      newMessage.textContent = "🎧 Listener: " + messageText;
+
+      messagesDiv.appendChild(newMessage);
+      input.value = "";
+
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  }
+function messageDJ(name) {
+  const number = '254790625120';
+  const text = `Hello ${name}, I'm listening to Kenyan Life Radio!`;
+  const url = `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+}
+
+function changeCover(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.querySelector('.hero').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('${e.target.result}')`;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function changeDJImage(event, input) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      input.nextElementSibling.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+</script>
+
+</body>
+</html>
